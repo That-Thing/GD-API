@@ -96,7 +96,7 @@ func NewGunDealsCollector() *colly.Collector {
 
 func ScrapeGunDealsTiles(url string) ([]Product, error) {
 	var products []Product
-	c := SharedCollector.Clone()
+	c := CloneCollectorWithRetry()
 
 	c.OnError(func(r *colly.Response, err error) {
 		log.Printf("Request URL: %s failed: %v", r.Request.URL, err)
@@ -159,7 +159,7 @@ func SearchDeals(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var products []Product
-	c := SharedCollector.Clone()
+	c := CloneCollectorWithRetry()
 
 	c.OnError(func(r *colly.Response, err error) {
 		log.Printf("Request URL: %s failed: %v", r.Request.URL, err)
@@ -216,7 +216,7 @@ func GetProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	productPage := ProductPage{}
-	c := SharedCollector.Clone()
+	c := CloneCollectorWithRetry()
 
 	c.OnHTML(".product-basic-info-card__image img", func(e *colly.HTMLElement) {
 		productPage.Image = e.Attr("src")

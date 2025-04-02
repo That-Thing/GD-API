@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 
 	"that-thing/gundeals-api/handlers" // Import handlers
 
@@ -49,8 +48,7 @@ func setupCollector() {
 	)
 
 	collector.Limit(&colly.LimitRule{
-		DomainGlob:  "*",
-		RandomDelay: 2 * time.Second, // Helps prevent rate limiting
+		DomainGlob: "*",
 	})
 
 	collector.OnRequest(func(r *colly.Request) {

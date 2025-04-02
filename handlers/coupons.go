@@ -9,9 +9,6 @@ import (
 	"github.com/gocolly/colly/v2"
 )
 
-// Shared collector
-var SharedCollector *colly.Collector
-
 // ErrorResponse represents a standardized error response format
 type ErrorResponse struct {
 	Error   string `json:"error"`
@@ -58,7 +55,7 @@ func GetCouponsHandler(w http.ResponseWriter, r *http.Request) {
 	storeFilter := r.URL.Query().Get("store")
 
 	var coupons []Coupon
-	c := SharedCollector.Clone()
+	c := CloneCollectorWithRetry()
 
 	c.OnError(func(r *colly.Response, err error) {
 		log.Printf("Request URL: %s failed with response code %d: %v",

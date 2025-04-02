@@ -27,8 +27,8 @@ go build
 ```
 ## Usage
 ### Commandline Arguments
-- ` -host`: Specifies the host address to bind the server to (default: "localhost")
-- ` -port`: Specifies the port number to listen on (default: 8080)
+- `-host`: Specifies the host address to bind the server to (default: "localhost")
+- `-port`: Specifies the port number to listen on (default: 8080)
 
 ### API Endpoints
 ```

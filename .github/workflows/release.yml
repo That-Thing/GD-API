@@ -21,20 +21,24 @@ jobs:
       - name: Build
         run: |
           go mod tidy
-          go build .
+          go build -o app .
+
       - name: Create Git Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git tag -a v1.0.${{ github.run_number }} -m "Release v1.0.${{ github.run_number }}"
-          git push origin v1.0.${{ github.run_number }}
-        
+          TAG="v1.0.${{ github.run_number }}"
+          git tag $TAG
+          git push origin $TAG
+          echo "TAG_NAME=$TAG" >> $GITHUB_ENV
+
       - name: Create Release
-        id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v1.0.${{ github.run_number }}
-          name: Release v1.0.${{ github.run_number }}
+          tag_name: ${{ env.TAG_NAME }}
+          name: Release ${{ env.TAG_NAME }}
           draft: false
           prerelease: false
         env:
@@ -43,7 +47,7 @@ jobs:
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.sha }}
-          files: app
+          tag_name: ${{ env.TAG_NAME }}
+          files: ./app
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

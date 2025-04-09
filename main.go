@@ -31,7 +31,7 @@ func main() {
 	})
 
 	addr := fmt.Sprintf("%s:%s", *host, *port)
-	log.Printf("Server starting on %s", addr)
+	log.Printf("Server starting on https://%s", addr)
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}

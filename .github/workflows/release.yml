@@ -21,7 +21,7 @@ jobs:
       - name: Build
         run: |
           go mod tidy
-          go build -o app .
+          go build -o gundeals-api .
 
       - name: Create Git Tag
         env:
@@ -48,6 +48,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.TAG_NAME }}
-          files: ./app
+          files: ./gundeals-api
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

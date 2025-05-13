@@ -289,18 +289,22 @@ func CategoryDeals(w http.ResponseWriter, r *http.Request) {
 	RespondWithJSON(w, products)
 }
 
+func PopularDeals(w http.ResponseWriter, r *http.Request) {
+	products, err := ScrapeGunDealsTiles("https://gun.deals/popular")
+	if err != nil {
+		log.Println("Error in popular deals handler:", err)
+		RespondWithError(w, http.StatusServiceUnavailable, "Failed to fetch popular deals: "+err.Error())
+		return
+	}
+	RespondWithJSON(w, products)
+}
+
 // ==== Routing ====
 
 func SetupDealsRoutes() {
-	staticRoutes := map[string]string{
-		"/relevant": "https://gun.deals/", // Get relevant deals from home page
-		"/today":    "https://gun.deals/today",
-	}
-
-	for route, url := range staticRoutes {
-		http.HandleFunc(route, StaticDealsHandler(url))
-	}
-
+	http.HandleFunc("/deals", StaticDealsHandler("https://gun.deals"))
+	http.HandleFunc("/deals/new", StaticDealsHandler("https://gun.deals/new"))
+	http.HandleFunc("/deals/popular", GetOnly(PopularDeals))
 	http.HandleFunc("/search", GetOnly(SearchDeals))
 	http.HandleFunc("/product/", GetOnly(GetProduct))
 	http.HandleFunc("/category/", GetOnly(CategoryDeals))

@@ -32,11 +32,45 @@ go build
 
 ### API Endpoints
 ```
-GET /relevant - Returns current deals from the homepage
-GET /today - Returns deals from today
-GET /category/{category} - Returns deals for a specific category
+GET /deals - Returns current deals from the homepage
+GET /deals/new - Returns the newest deals
+GET /deals/popular - Returns the most popular deals
 GET /search?q={query} - Search for products
-GET /product/{id} - Get deals for a specific product
+GET /product/{upc} - Get detailed information and all listings for a specific product by UPC
+GET /category/{category-slug} - Returns deals for a specific category (e.g., /category/hand-guns)
+```
+
+#### Response Format
+All endpoints return JSON responses. The basic product structure includes:
+```json
+{
+    "image": "product image URL",
+    "title": "product name",
+    "price": "current price",
+    "price_addition": "additional price info (if any)",
+    "merchant": "store name",
+    "link": "deal URL"
+}
+```
+
+The `/product/{upc}` endpoint returns additional details including specifications and all available listings:
+```json
+{
+    "image": "product image URL",
+    "title": "product name",
+    "details": {
+        "specification_name": "value"
+    },
+    "all_listings": [
+        {
+            "store_name": "merchant name",
+            "price": "price",
+            "shipping": "shipping cost",
+            "link": "store URL",
+            "out_of_stock": false
+        }
+    ]
+}
 ```
 ---
 ## Disclaimer
